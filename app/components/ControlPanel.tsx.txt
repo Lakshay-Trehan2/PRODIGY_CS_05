@@ -1,0 +1,62 @@
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { FiPlay, FiSquare, FiTrash2, FiFilter } from "react-icons/fi"
+
+interface ControlPanelProps {
+  isCapturing: boolean
+  setIsCapturing: (isCapturing: boolean) => void
+  filter: string
+  setFilter: (filter: string) => void
+  clearPackets: () => void
+}
+
+export default function ControlPanel({
+  isCapturing,
+  setIsCapturing,
+  filter,
+  setFilter,
+  clearPackets,
+}: ControlPanelProps) {
+  return (
+    <motion.div
+      className="flex flex-wrap gap-4 mb-4"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Button
+        onClick={() => setIsCapturing(!isCapturing)}
+        className={`${isCapturing ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} text-white font-bold px-6 py-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:rotate-3 flex items-center`}
+      >
+        {isCapturing ? (
+          <>
+            <FiSquare className="mr-2" /> Stop Capture
+          </>
+        ) : (
+          <>
+            <FiPlay className="mr-2" /> Start Capture
+          </>
+        )}
+      </Button>
+      <Button
+        onClick={clearPackets}
+        variant="outline"
+        className="border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white dark:border-yellow-400 dark:text-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900 font-bold px-6 py-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:rotate-3 flex items-center"
+      >
+        <FiTrash2 className="mr-2" /> Clear Packets
+      </Button>
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Filter by protocol"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="w-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-blue-500 dark:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 rounded-full px-4 py-2 pl-10"
+        />
+        <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-400" />
+      </div>
+    </motion.div>
+  )
+}
+
